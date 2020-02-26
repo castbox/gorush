@@ -374,10 +374,10 @@ Retry:
 				"token":  token,
 				"result": -1,
 			})
-			_, _ := http.Post(
+			http.Post(
 				FeedBackUrl,
 				"application/json",
-				strings.NewReader(string(bodyJson)),
+				strings.NewReader(string(bodyJSON)),
 			)
 			// apns server error
 			LogPush(FailedPush, token, req, err)
@@ -402,10 +402,10 @@ Retry:
 			"token":  token,
 			"result": 0,
 		})
-		_, _ := http.Post(
+		http.Post(
 			FeedBackUrl,
 			"application/json",
-			strings.NewReader(string(bodyJson)),
+			strings.NewReader(string(bodyJSON)),
 		)
 
 		if res.Sent() {

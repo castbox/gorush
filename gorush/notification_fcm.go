@@ -152,10 +152,10 @@ Retry:
 		"token":  req.Tokens[0],
 		"result": result,
 	})
-	_, _ := http.Post(
+	http.Post(
 		FeedBackUrl,
 		"application/json",
-		strings.NewReader(string(bodyJson)),
+		strings.NewReader(string(bodyJSON)),
 	)
 
 	StatStorage.AddAndroidSuccess(int64(res.Success))
