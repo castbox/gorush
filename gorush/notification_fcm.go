@@ -140,7 +140,7 @@ Retry:
 	}
 
 	if !req.IsTopic() {
-		LogAccess.Debug(fmt.Sprintf("Android Success count: %d, Failure count: %d", c, res.Failure))
+		LogAccess.Debug(fmt.Sprintf("Android Success count: %d, Failure count: %d", res.Success, res.Failure))
 	}
 	var result int
 	if res.Success > 0 {
