@@ -27,6 +27,8 @@ const (
 	// the target device. It is an error to use this priority for a push
 	// notification that contains only the content-available key.
 	ApnsPriorityHigh = 10
+
+	FeedBackUrl = "http://127.0.0.1:8080/v2/user/push_feedback"
 )
 
 // Alert is APNs payload

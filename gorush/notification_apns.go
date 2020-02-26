@@ -4,9 +4,11 @@ import (
 	"crypto/ecdsa"
 	"crypto/tls"
 	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"net/http"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/mitchellh/mapstructure"
@@ -368,6 +370,15 @@ Retry:
 				// ref: https://github.com/sideshow/apns2/blob/master/response.go#L14-L65
 				err = errors.New(res.Reason)
 			}
+			bodyJSON, _ := json.Marshal(map[string]interface{}{
+				"token":  token,
+				"result": -1,
+			})
+			_, _ := http.Post(
+				FeedBackUrl,
+				"application/json",
+				strings.NewReader(string(bodyJson)),
+			)
 			// apns server error
 			LogPush(FailedPush, token, req, err)
 
@@ -387,6 +398,15 @@ Retry:
 			isError = true
 			continue
 		}
+		bodyJSON, _ := json.Marshal(map[string]interface{}{
+			"token":  token,
+			"result": 0,
+		})
+		_, _ := http.Post(
+			FeedBackUrl,
+			"application/json",
+			strings.NewReader(string(bodyJson)),
+		)
 
 		if res.Sent() {
 			LogPush(SucceededPush, token, req, nil)

@@ -1,8 +1,11 @@
 package gorush
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
+	"strings"
 
 	"github.com/appleboy/go-fcm"
 	"github.com/sirupsen/logrus"
@@ -137,8 +140,23 @@ Retry:
 	}
 
 	if !req.IsTopic() {
-		LogAccess.Debug(fmt.Sprintf("Android Success count: %d, Failure count: %d", res.Success, res.Failure))
+		LogAccess.Debug(fmt.Sprintf("Android Success count: %d, Failure count: %d", c, res.Failure))
 	}
+	var result int
+	if res.Success > 0 {
+		result = 0
+	} else {
+		result = -1
+	}
+	bodyJSON, _ := json.Marshal(map[string]interface{}{
+		"token":  req.Tokens[0],
+		"result": result,
+	})
+	_, _ := http.Post(
+		FeedBackUrl,
+		"application/json",
+		strings.NewReader(string(bodyJson)),
+	)
 
 	StatStorage.AddAndroidSuccess(int64(res.Success))
 	StatStorage.AddAndroidError(int64(res.Failure))
