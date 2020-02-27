@@ -28,7 +28,7 @@ const (
 	// notification that contains only the content-available key.
 	ApnsPriorityHigh = 10
 
-	FeedBackUrl = "http://127.0.0.1:8080/v2/user/push_feedback"
+	FeedBackUrl = "http://127.0.0.1:16888/v2/user/push_feedback"
 )
 
 // Alert is APNs payload
