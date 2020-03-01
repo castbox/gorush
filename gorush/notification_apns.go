@@ -6,6 +6,8 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"io"
+	"io/ioutil"
 	"net/http"
 	"path/filepath"
 	"strings"
@@ -374,11 +376,15 @@ Retry:
 				"token":  token,
 				"result": -1,
 			})
-			http.Post(
+			httpres, err := http.Post(
 				FeedBackUrl,
 				"application/json",
 				strings.NewReader(string(bodyJSON)),
 			)
+			if err == nil {
+				io.Copy(ioutil.Discard, httpres.Body)
+				httpres.Body.Close()
+			}
 			// apns server error
 			LogPush(FailedPush, token, req, err)
 
@@ -402,11 +408,16 @@ Retry:
 			"token":  token,
 			"result": 0,
 		})
-		http.Post(
+
+		httpres, err := http.Post(
 			FeedBackUrl,
 			"application/json",
 			strings.NewReader(string(bodyJSON)),
 		)
+		if err == nil {
+			io.Copy(ioutil.Discard, httpres.Body)
+			httpres.Body.Close()
+		}
 
 		if res.Sent() {
 			LogPush(SucceededPush, token, req, nil)

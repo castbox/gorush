@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"net/http"
 	"strings"
 
@@ -152,11 +154,15 @@ Retry:
 		"token":  req.Tokens[0],
 		"result": result,
 	})
-	http.Post(
+	httpres, err := http.Post(
 		FeedBackUrl,
 		"application/json",
 		strings.NewReader(string(bodyJSON)),
 	)
+	if err == nil {
+		io.Copy(ioutil.Discard, httpres.Body)
+		httpres.Body.Close()
+	}
 
 	StatStorage.AddAndroidSuccess(int64(res.Success))
 	StatStorage.AddAndroidError(int64(res.Failure))
