@@ -377,26 +377,26 @@ Retry:
 				"result": -1,
 			})
 
-			go func(url string, body []byte) {
-				httpres, err := http.Post(
-					url,
-					"application/json",
-					strings.NewReader(string(body)),
-				)
-				if err == nil {
-					io.Copy(ioutil.Discard, httpres.Body)
-					httpres.Body.Close()
-				}
-			}(FeedBackUrl, bodyJSON)
-			// httpres, err := http.Post(
-			// 	FeedBackUrl,
-			// 	"application/json",
-			// 	strings.NewReader(string(bodyJSON)),
-			// )
-			// if err == nil {
-			// 	io.Copy(ioutil.Discard, httpres.Body)
-			// 	httpres.Body.Close()
-			// }
+			// go func(url string, body []byte) {
+			// 	httpres, err := http.Post(
+			// 		url,
+			// 		"application/json",
+			// 		strings.NewReader(string(body)),
+			// 	)
+			// 	if err == nil {
+			// 		io.Copy(ioutil.Discard, httpres.Body)
+			// 		httpres.Body.Close()
+			// 	}
+			// }(FeedBackUrl, bodyJSON)
+			httpres, err := http.Post(
+				FeedBackUrl,
+				"application/json",
+				strings.NewReader(string(bodyJSON)),
+			)
+			if err == nil {
+				io.Copy(ioutil.Discard, httpres.Body)
+				httpres.Body.Close()
+			}
 			// apns server error
 			LogPush(FailedPush, token, req, err)
 
@@ -421,27 +421,27 @@ Retry:
 			"result": 0,
 		})
 
-		go func(url string, body []byte) {
-			httpres, err := http.Post(
-				url,
-				"application/json",
-				strings.NewReader(string(body)),
-			)
-			if err == nil {
-				io.Copy(ioutil.Discard, httpres.Body)
-				httpres.Body.Close()
-			}
-		}(FeedBackUrl, bodyJSON)
+		// go func(url string, body []byte) {
+		// 	httpres, err := http.Post(
+		// 		url,
+		// 		"application/json",
+		// 		strings.NewReader(string(body)),
+		// 	)
+		// 	if err == nil {
+		// 		io.Copy(ioutil.Discard, httpres.Body)
+		// 		httpres.Body.Close()
+		// 	}
+		// }(FeedBackUrl, bodyJSON)
 
-		// httpres, err := http.Post(
-		// 	FeedBackUrl,
-		// 	"application/json",
-		// 	strings.NewReader(string(bodyJSON)),
-		// )
-		// if err == nil {
-		// 	io.Copy(ioutil.Discard, httpres.Body)
-		// 	httpres.Body.Close()
-		// }
+		httpres, err := http.Post(
+			FeedBackUrl,
+			"application/json",
+			strings.NewReader(string(bodyJSON)),
+		)
+		if err == nil {
+			io.Copy(ioutil.Discard, httpres.Body)
+			httpres.Body.Close()
+		}
 
 		if res.Sent() {
 			LogPush(SucceededPush, token, req, nil)
